@@ -1,0 +1,15 @@
+# github.com/go-kit/kit v0.8.0
+github.com/go-kit/kit/log
+# github.com/go-logfmt/logfmt v0.4.0
+github.com/go-logfmt/logfmt
+# github.com/google/uuid v1.0.0
+github.com/google/uuid
+# github.com/kr/logfmt v0.0.0-20140226030751-b84e30acd515
+github.com/kr/logfmt
+# github.com/pborman/uuid v1.2.0
+github.com/pborman/uuid
+# goji.io v2.0.2+incompatible
+goji.io
+goji.io/pat
+goji.io/internal
+goji.io/pattern

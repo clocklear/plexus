@@ -11,6 +11,8 @@ import (
 	"syscall"
 	"time"
 
+	ph "github.com/clocklear/plex-handler/cmd/plex-handler/http"
+
 	"github.com/go-kit/kit/log"
 )
 
@@ -30,11 +32,6 @@ func main() {
 		logger = log.With(logger, "ts", log.DefaultTimestampUTC)
 		logger = log.With(logger, "caller", log.DefaultCaller)
 	}
-
-	// Mechanical.
-	errc := make(chan error)
-	_, cancel := context.WithCancel(context.Background())
-	defer cancel()
 
 	// Interrupt.
 	go func() {
@@ -60,7 +57,7 @@ func main() {
 		// Server config
 		{
 			srv.Addr = *httpAddr
-			srv.Handler = HandlerGetter()
+			srv.Handler = ph.DefaultRequestHandler(logger)
 			srv.ReadTimeout = time.Second * 30
 			srv.WriteTimeout = time.Second * 30
 		}
