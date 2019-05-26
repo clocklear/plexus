@@ -1,0 +1,437 @@
+{
+  "definitions": {},
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "http://example.com/root.json",
+  "type": "object",
+  "title": "Plex Webhook Payload Schema",
+  "required": [
+    "event",
+    "user",
+    "owner",
+    "Account",
+    "Server",
+    "Player",
+    "Metadata"
+  ],
+  "properties": {
+    "event": {
+      "$id": "#/properties/event",
+      "type": "string",
+      "title": "The Event Schema",
+      "default": "",
+      "examples": [
+        "media.play"
+      ],
+      "pattern": "^(.*)$"
+    },
+    "user": {
+      "$id": "#/properties/user",
+      "type": "boolean",
+      "title": "The User Schema",
+      "default": false,
+      "examples": [
+        true
+      ]
+    },
+    "owner": {
+      "$id": "#/properties/owner",
+      "type": "boolean",
+      "title": "The Owner Schema",
+      "default": false,
+      "examples": [
+        true
+      ]
+    },
+    "Account": {
+      "$id": "#/properties/Account",
+      "type": "object",
+      "title": "The Account Schema",
+      "required": [
+        "id",
+        "thumb",
+        "title"
+      ],
+      "properties": {
+        "id": {
+          "$id": "#/properties/Account/properties/id",
+          "type": "integer",
+          "title": "The Id Schema",
+          "default": 0,
+          "examples": [
+            1
+          ]
+        },
+        "thumb": {
+          "$id": "#/properties/Account/properties/thumb",
+          "type": "string",
+          "title": "The Thumb Schema",
+          "default": "",
+          "examples": [
+            "https://plex.tv/users/1022b120ffbaa/avatar?c=1465525047"
+          ],
+          "pattern": "^(.*)$"
+        },
+        "title": {
+          "$id": "#/properties/Account/properties/title",
+          "type": "string",
+          "title": "The Title Schema",
+          "default": "",
+          "examples": [
+            "elan"
+          ],
+          "pattern": "^(.*)$"
+        }
+      }
+    },
+    "Server": {
+      "$id": "#/properties/Server",
+      "type": "object",
+      "title": "The Server Schema",
+      "required": [
+        "title",
+        "uuid"
+      ],
+      "properties": {
+        "title": {
+          "$id": "#/properties/Server/properties/title",
+          "type": "string",
+          "title": "The Title Schema",
+          "default": "",
+          "examples": [
+            "Office"
+          ],
+          "pattern": "^(.*)$"
+        },
+        "uuid": {
+          "$id": "#/properties/Server/properties/uuid",
+          "type": "string",
+          "title": "The Uuid Schema",
+          "default": "",
+          "examples": [
+            "54664a3d8acc39983675640ec9ce00b70af9cc36"
+          ],
+          "pattern": "^(.*)$"
+        }
+      }
+    },
+    "Player": {
+      "$id": "#/properties/Player",
+      "type": "object",
+      "title": "The Player Schema",
+      "required": [
+        "local",
+        "publicAddress",
+        "title",
+        "uuid"
+      ],
+      "properties": {
+        "local": {
+          "$id": "#/properties/Player/properties/local",
+          "type": "boolean",
+          "title": "The Local Schema",
+          "default": false,
+          "examples": [
+            true
+          ]
+        },
+        "publicAddress": {
+          "$id": "#/properties/Player/properties/publicAddress",
+          "type": "string",
+          "title": "The Publicaddress Schema",
+          "default": "",
+          "examples": [
+            "200.200.200.200"
+          ],
+          "pattern": "^(.*)$"
+        },
+        "title": {
+          "$id": "#/properties/Player/properties/title",
+          "type": "string",
+          "title": "The Title Schema",
+          "default": "",
+          "examples": [
+            "Plex Web (Safari)"
+          ],
+          "pattern": "^(.*)$"
+        },
+        "uuid": {
+          "$id": "#/properties/Player/properties/uuid",
+          "type": "string",
+          "title": "The Uuid Schema",
+          "default": "",
+          "examples": [
+            "r6yfkdnfggbh2bdnvkffwbms"
+          ],
+          "pattern": "^(.*)$"
+        }
+      }
+    },
+    "Metadata": {
+      "$id": "#/properties/Metadata",
+      "type": "object",
+      "title": "The Metadata Schema",
+      "required": [
+        "librarySectionType",
+        "ratingKey",
+        "key",
+        "parentRatingKey",
+        "grandparentRatingKey",
+        "guid",
+        "librarySectionID",
+        "type",
+        "title",
+        "grandparentKey",
+        "parentKey",
+        "grandparentTitle",
+        "parentTitle",
+        "summary",
+        "index",
+        "parentIndex",
+        "ratingCount",
+        "thumb",
+        "art",
+        "parentThumb",
+        "grandparentThumb",
+        "grandparentArt",
+        "addedAt",
+        "updatedAt"
+      ],
+      "properties": {
+        "librarySectionType": {
+          "$id": "#/properties/Metadata/properties/librarySectionType",
+          "type": "string",
+          "title": "The Librarysectiontype Schema",
+          "default": "",
+          "examples": [
+            "artist"
+          ],
+          "pattern": "^(.*)$"
+        },
+        "ratingKey": {
+          "$id": "#/properties/Metadata/properties/ratingKey",
+          "type": "string",
+          "title": "The Ratingkey Schema",
+          "default": "",
+          "examples": [
+            "1936545"
+          ],
+          "pattern": "^(.*)$"
+        },
+        "key": {
+          "$id": "#/properties/Metadata/properties/key",
+          "type": "string",
+          "title": "The Key Schema",
+          "default": "",
+          "examples": [
+            "/library/metadata/1936545"
+          ],
+          "pattern": "^(.*)$"
+        },
+        "parentRatingKey": {
+          "$id": "#/properties/Metadata/properties/parentRatingKey",
+          "type": "string",
+          "title": "The Parentratingkey Schema",
+          "default": "",
+          "examples": [
+            "1936544"
+          ],
+          "pattern": "^(.*)$"
+        },
+        "grandparentRatingKey": {
+          "$id": "#/properties/Metadata/properties/grandparentRatingKey",
+          "type": "string",
+          "title": "The Grandparentratingkey Schema",
+          "default": "",
+          "examples": [
+            "1936543"
+          ],
+          "pattern": "^(.*)$"
+        },
+        "guid": {
+          "$id": "#/properties/Metadata/properties/guid",
+          "type": "string",
+          "title": "The Guid Schema",
+          "default": "",
+          "examples": [
+            "com.plexapp.agents.plexmusic://gracenote/track/7572499-91016293BE6BF7F1AB2F848F736E74E5/7572500-3CBAE310D4F3E66C285E104A1458B272?lang=en"
+          ],
+          "pattern": "^(.*)$"
+        },
+        "librarySectionID": {
+          "$id": "#/properties/Metadata/properties/librarySectionID",
+          "type": "integer",
+          "title": "The Librarysectionid Schema",
+          "default": 0,
+          "examples": [
+            1224
+          ]
+        },
+        "type": {
+          "$id": "#/properties/Metadata/properties/type",
+          "type": "string",
+          "title": "The Type Schema",
+          "default": "",
+          "examples": [
+            "track"
+          ],
+          "pattern": "^(.*)$"
+        },
+        "title": {
+          "$id": "#/properties/Metadata/properties/title",
+          "type": "string",
+          "title": "The Title Schema",
+          "default": "",
+          "examples": [
+            "Love The One You're With"
+          ],
+          "pattern": "^(.*)$"
+        },
+        "grandparentKey": {
+          "$id": "#/properties/Metadata/properties/grandparentKey",
+          "type": "string",
+          "title": "The Grandparentkey Schema",
+          "default": "",
+          "examples": [
+            "/library/metadata/1936543"
+          ],
+          "pattern": "^(.*)$"
+        },
+        "parentKey": {
+          "$id": "#/properties/Metadata/properties/parentKey",
+          "type": "string",
+          "title": "The Parentkey Schema",
+          "default": "",
+          "examples": [
+            "/library/metadata/1936544"
+          ],
+          "pattern": "^(.*)$"
+        },
+        "grandparentTitle": {
+          "$id": "#/properties/Metadata/properties/grandparentTitle",
+          "type": "string",
+          "title": "The Grandparenttitle Schema",
+          "default": "",
+          "examples": [
+            "Stephen Stills"
+          ],
+          "pattern": "^(.*)$"
+        },
+        "parentTitle": {
+          "$id": "#/properties/Metadata/properties/parentTitle",
+          "type": "string",
+          "title": "The Parenttitle Schema",
+          "default": "",
+          "examples": [
+            "Stephen Stills"
+          ],
+          "pattern": "^(.*)$"
+        },
+        "summary": {
+          "$id": "#/properties/Metadata/properties/summary",
+          "type": "string",
+          "title": "The Summary Schema",
+          "default": "",
+          "examples": [
+            ""
+          ],
+          "pattern": "^(.*)$"
+        },
+        "index": {
+          "$id": "#/properties/Metadata/properties/index",
+          "type": "integer",
+          "title": "The Index Schema",
+          "default": 0,
+          "examples": [
+            1
+          ]
+        },
+        "parentIndex": {
+          "$id": "#/properties/Metadata/properties/parentIndex",
+          "type": "integer",
+          "title": "The Parentindex Schema",
+          "default": 0,
+          "examples": [
+            1
+          ]
+        },
+        "ratingCount": {
+          "$id": "#/properties/Metadata/properties/ratingCount",
+          "type": "integer",
+          "title": "The Ratingcount Schema",
+          "default": 0,
+          "examples": [
+            6794
+          ]
+        },
+        "thumb": {
+          "$id": "#/properties/Metadata/properties/thumb",
+          "type": "string",
+          "title": "The Thumb Schema",
+          "default": "",
+          "examples": [
+            "/library/metadata/1936544/thumb/1432897518"
+          ],
+          "pattern": "^(.*)$"
+        },
+        "art": {
+          "$id": "#/properties/Metadata/properties/art",
+          "type": "string",
+          "title": "The Art Schema",
+          "default": "",
+          "examples": [
+            "/library/metadata/1936543/art/1485951497"
+          ],
+          "pattern": "^(.*)$"
+        },
+        "parentThumb": {
+          "$id": "#/properties/Metadata/properties/parentThumb",
+          "type": "string",
+          "title": "The Parentthumb Schema",
+          "default": "",
+          "examples": [
+            "/library/metadata/1936544/thumb/1432897518"
+          ],
+          "pattern": "^(.*)$"
+        },
+        "grandparentThumb": {
+          "$id": "#/properties/Metadata/properties/grandparentThumb",
+          "type": "string",
+          "title": "The Grandparentthumb Schema",
+          "default": "",
+          "examples": [
+            "/library/metadata/1936543/thumb/1485951497"
+          ],
+          "pattern": "^(.*)$"
+        },
+        "grandparentArt": {
+          "$id": "#/properties/Metadata/properties/grandparentArt",
+          "type": "string",
+          "title": "The Grandparentart Schema",
+          "default": "",
+          "examples": [
+            "/library/metadata/1936543/art/1485951497"
+          ],
+          "pattern": "^(.*)$"
+        },
+        "addedAt": {
+          "$id": "#/properties/Metadata/properties/addedAt",
+          "type": "integer",
+          "title": "The Addedat Schema",
+          "default": 0,
+          "examples": [
+            1000396126
+          ]
+        },
+        "updatedAt": {
+          "$id": "#/properties/Metadata/properties/updatedAt",
+          "type": "integer",
+          "title": "The Updatedat Schema",
+          "default": 0,
+          "examples": [
+            1432897518
+          ]
+        }
+      }
+    }
+  }
+}

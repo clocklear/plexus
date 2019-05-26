@@ -1,7 +1,6 @@
 package main
 
 import (
-	"context"
 	"flag"
 	"fmt"
 	"net/http"
@@ -12,6 +11,7 @@ import (
 	"time"
 
 	ph "github.com/clocklear/plex-handler/cmd/plex-handler/http"
+	"github.com/clocklear/plex-handler/pkg/plex"
 
 	"github.com/go-kit/kit/log"
 )
@@ -20,8 +20,10 @@ func main() {
 
 	// Config.
 	var (
-		httpAddr  = flag.String("http.addr", ":3000", "HTTP listen address")
-		debugAddr = flag.String("debug.addr", ":3001", "Debug and metrics listen address")
+		httpAddr      = flag.String("http.addr", ":3000", "HTTP listen address")
+		debugAddr     = flag.String("debug.addr", ":3001", "Debug and metrics listen address")
+		storeFile     = flag.String("store.file", "activity.json", "The file used to capture webhook activity.")
+		maxStoreItems = flag.Int("store.maxitems", 100, "Maximum number of items in the activity store")
 	)
 	flag.Parse()
 
@@ -34,6 +36,7 @@ func main() {
 	}
 
 	// Interrupt.
+	errc := make(chan error, 1)
 	go func() {
 		c := make(chan os.Signal, 1)
 		signal.Notify(c, syscall.SIGINT, syscall.SIGTERM)
@@ -54,13 +57,26 @@ func main() {
 		logger := log.With(logger, "transport", "http")
 		logger.Log("addr", *httpAddr)
 
-		// Server config
-		{
-			srv.Addr = *httpAddr
-			srv.Handler = ph.DefaultRequestHandler(logger)
-			srv.ReadTimeout = time.Second * 30
-			srv.WriteTimeout = time.Second * 30
+		f, err := os.OpenFile(*storeFile, os.O_CREATE|os.O_APPEND, 0655)
+		defer f.Close()
+		if err != nil {
+			errc <- err
 		}
+		s, err := plex.NewActivityStore(f, *maxStoreItems)
+		if err != nil {
+			errc <- err
+		}
+		logger.Log("store", *storeFile)
+
+		// Server config
+		h, err := ph.DefaultRequestHandler(logger, s)
+		if err != nil {
+			errc <- err
+		}
+		srv.Addr = *httpAddr
+		srv.Handler = h
+		srv.ReadTimeout = time.Second * 30
+		srv.WriteTimeout = time.Second * 30
 
 		errc <- srv.ListenAndServe()
 	}()

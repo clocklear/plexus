@@ -5,7 +5,6 @@ import (
 	"encoding/json"
 	"fmt"
 	"net/http"
-	"strings"
 	"time"
 
 	"github.com/go-kit/kit/log"
@@ -124,5 +123,5 @@ type failureResponse struct {
 }
 
 type messageResponse struct {
-	Message     string `json:"msg"`
+	Message string `json:"msg"`
 }
