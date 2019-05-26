@@ -1,5 +1,9 @@
 package plex
 
+import (
+	"time"
+)
+
 // WebhookPayload represents a payload from a plex webhook
 type WebhookPayload struct {
 	Event   string `json:"event"`
@@ -46,4 +50,11 @@ type WebhookPayload struct {
 		AddedAt              int    `json:"addedAt"`
 		UpdatedAt            int    `json:"updatedAt"`
 	} `json:"Metadata"`
+}
+
+type ActivityLog []LogEntry
+
+type LogEntry struct {
+	ReceivedAt time.Time      `json:"receivedAt"`
+	Payload    WebhookPayload `json:"payload"`
 }

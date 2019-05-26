@@ -25,6 +25,7 @@ func DefaultRequestHandler(logger log.Logger, store *plex.ActivityStore) (*goji.
 
 	mux.HandleFunc(pat.Get("/health"), handleHealthCheck())
 	mux.HandleFunc(pat.Post("/hook"), handlePlexWebhook(v, store))
+	mux.HandleFunc(pat.Get("/hook"), handleGetAllHooks(store))
 
 	mux.Use(loggerMiddleware(logger))
 	return mux, nil
@@ -58,8 +59,19 @@ func handlePlexWebhook(v *schema.Validator, store *plex.ActivityStore) func(w ht
 			Failure(w, err, http.StatusInternalServerError, logger)
 			return
 		}
-		store.Add(pl)
+		err = store.Add(pl)
+		if err != nil {
+			Failure(w, err, http.StatusInternalServerError, logger)
+			return
+		}
 
 		Ok(w, messageResponse{Message: "Ok"}, logger)
+	}
+}
+
+func handleGetAllHooks(store *plex.ActivityStore) func(w http.ResponseWriter, r *http.Request) {
+	return func(w http.ResponseWriter, r *http.Request) {
+		logger := r.Context().Value(keyLogger).(log.Logger)
+		Ok(w, store.GetAll(), logger)
 	}
 }

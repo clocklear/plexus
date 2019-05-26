@@ -57,7 +57,7 @@ func main() {
 		logger := log.With(logger, "transport", "http")
 		logger.Log("addr", *httpAddr)
 
-		f, err := os.OpenFile(*storeFile, os.O_CREATE|os.O_APPEND, 0655)
+		f, err := os.OpenFile(*storeFile, os.O_CREATE|os.O_APPEND|os.O_RDWR, 0655)
 		defer f.Close()
 		if err != nil {
 			errc <- err
