@@ -9,8 +9,8 @@ import (
 	"goji.io"
 	"goji.io/pat"
 
-	"github.com/clocklear/plex-handler/pkg/plex"
-	"github.com/clocklear/plex-handler/pkg/plex/schema"
+	"github.com/clocklear/plexus/pkg/plex"
+	"github.com/clocklear/plexus/pkg/plex/schema"
 )
 
 // DefaultRequestHandler creates an instance of the default HTTP request handler

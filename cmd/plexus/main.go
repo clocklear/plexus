@@ -10,8 +10,8 @@ import (
 	"syscall"
 	"time"
 
-	ph "github.com/clocklear/plex-handler/cmd/plex-handler/http"
-	"github.com/clocklear/plex-handler/pkg/plex"
+	ph "github.com/clocklear/plexus/cmd/plexus/http"
+	"github.com/clocklear/plexus/pkg/plex"
 
 	"github.com/go-kit/kit/log"
 )
