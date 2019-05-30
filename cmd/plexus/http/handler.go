@@ -4,6 +4,7 @@ import (
 	"encoding/json"
 	"io/ioutil"
 	"net/http"
+	"time"
 
 	"github.com/go-kit/kit/log"
 	"goji.io"
@@ -14,7 +15,7 @@ import (
 )
 
 // DefaultRequestHandler creates an instance of the default HTTP request handler
-func DefaultRequestHandler(logger log.Logger, store *plex.ActivityStore) (*goji.Mux, error) {
+func DefaultRequestHandler(logger log.Logger, store *plex.Store, cfg plex.Config) (*goji.Mux, error) {
 
 	v, err := schema.NewValidator()
 	if err != nil {
@@ -24,8 +25,8 @@ func DefaultRequestHandler(logger log.Logger, store *plex.ActivityStore) (*goji.
 	mux := goji.NewMux()
 
 	mux.HandleFunc(pat.Get("/health"), handleHealthCheck())
-	mux.HandleFunc(pat.Post("/hook"), handlePlexWebhook(v, store))
-	mux.HandleFunc(pat.Get("/hook"), handleGetAllHooks(store))
+	mux.HandleFunc(pat.Post("/hook"), handlePlexWebhook(v, store, cfg))
+	mux.HandleFunc(pat.Get("/activity"), handleGetAllHooks(store))
 
 	mux.Use(loggerMiddleware(logger))
 	return mux, nil
@@ -38,9 +39,10 @@ func handleHealthCheck() func(w http.ResponseWriter, r *http.Request) {
 	}
 }
 
-func handlePlexWebhook(v *schema.Validator, store *plex.ActivityStore) func(w http.ResponseWriter, r *http.Request) {
+func handlePlexWebhook(v *schema.Validator, store *plex.Store, cfg plex.Config) func(w http.ResponseWriter, r *http.Request) {
 	return func(w http.ResponseWriter, r *http.Request) {
 		logger := r.Context().Value(keyLogger).(log.Logger)
+		reqID := r.Context().Value(keyRequestID).(string)
 
 		// Extract request body
 		payload, err := ioutil.ReadAll(r.Body)
@@ -59,19 +61,34 @@ func handlePlexWebhook(v *schema.Validator, store *plex.ActivityStore) func(w ht
 			Failure(w, err, http.StatusInternalServerError, logger)
 			return
 		}
-		err = store.Add(pl)
+		err = store.AddActivity(plex.Activity{
+			RequestID:  reqID,
+			ReceivedAt: time.Now(),
+			Payload:    pl,
+		})
 		if err != nil {
 			Failure(w, err, http.StatusInternalServerError, logger)
 			return
+		}
+
+		// Pass payload to configuration handler
+		err = cfg.Handle(logger, pl, payload)
+		if err != nil {
+			Failure(w, err, http.StatusInternalServerError, logger)
 		}
 
 		Ok(w, messageResponse{Message: "Ok"}, logger)
 	}
 }
 
-func handleGetAllHooks(store *plex.ActivityStore) func(w http.ResponseWriter, r *http.Request) {
+func handleGetAllHooks(store *plex.Store) func(w http.ResponseWriter, r *http.Request) {
 	return func(w http.ResponseWriter, r *http.Request) {
 		logger := r.Context().Value(keyLogger).(log.Logger)
-		Ok(w, store.GetAll(), logger)
+		act, err := store.GetAllActivity()
+		if err != nil {
+			Failure(w, err, http.StatusInternalServerError, logger)
+			return
+		}
+		Ok(w, act, logger)
 	}
 }

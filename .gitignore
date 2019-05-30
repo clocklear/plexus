@@ -14,3 +14,5 @@
 activity.json
 plexus
 !/cmd/**
+config.json
+store

@@ -28,6 +28,7 @@ const (
 	errBadData = Error("invalid input data")
 
 	keyLogger contextKey = iota
+	keyRequestID
 )
 
 type responseSpy struct {
@@ -48,10 +49,14 @@ func loggerMiddleware(baseLogger log.Logger) Middleware {
 	return func(next http.Handler) http.Handler {
 		h := func(w http.ResponseWriter, rq *http.Request) {
 
-			logger := log.With(baseLogger, "request_id", uuid.NewRandom().String())
+			reqID := uuid.NewRandom().String()
+			logger := log.With(baseLogger, "request_id", reqID)
 
 			rq = rq.WithContext(
 				context.WithValue(rq.Context(), keyLogger, logger),
+			)
+			rq = rq.WithContext(
+				context.WithValue(rq.Context(), keyRequestID, reqID),
 			)
 
 			begin := time.Now()

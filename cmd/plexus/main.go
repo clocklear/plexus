@@ -20,10 +20,10 @@ func main() {
 
 	// Config.
 	var (
-		httpAddr      = flag.String("http.addr", ":3000", "HTTP listen address")
-		debugAddr     = flag.String("debug.addr", ":3001", "Debug and metrics listen address")
-		storeFile     = flag.String("store.file", "activity.json", "The file used to capture webhook activity.")
-		maxStoreItems = flag.Int("store.maxitems", 100, "Maximum number of items in the activity store")
+		httpAddr       = flag.String("http.addr", ":3000", "HTTP listen address")
+		debugAddr      = flag.String("debug.addr", ":3001", "Debug and metrics listen address")
+		storeDirectory = flag.String("db.path", "./store", "The folder to be used as a JSON database for plexus")
+		configFile     = flag.String("config.file", "config.json", "The trigger configuration file")
 	)
 	flag.Parse()
 
@@ -57,19 +57,26 @@ func main() {
 		logger := log.With(logger, "transport", "http")
 		logger.Log("addr", *httpAddr)
 
-		f, err := os.OpenFile(*storeFile, os.O_CREATE|os.O_APPEND|os.O_RDWR, 0655)
-		defer f.Close()
+		// Set up store
+		s, err := plex.NewStore(*storeDirectory)
 		if err != nil {
 			errc <- err
 		}
-		s, err := plex.NewActivityStore(f, *maxStoreItems)
+
+		// Load config
+		cf, err := os.Open(*configFile)
 		if err != nil {
 			errc <- err
 		}
-		logger.Log("store", *storeFile)
+		cfg, err := plex.NewConfig(cf)
+		if err != nil {
+			errc <- err
+		}
+
+		logger.Log("store", *storeDirectory, "config", *configFile)
 
 		// Server config
-		h, err := ph.DefaultRequestHandler(logger, s)
+		h, err := ph.DefaultRequestHandler(logger, s, cfg)
 		if err != nil {
 			errc <- err
 		}
