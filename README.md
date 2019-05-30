@@ -3,6 +3,10 @@ An experimental project leveraging Plex media server webhooks in order to facili
 
 The goal here for me is to create a webapp that will allow me to land Plex webhook calls, explore them in a simple UI, and perhaps rig up automation based on them. (perhaps dim my lights when a movie starts on a certain device?)
 
+## building
+
+Just clone the repo and `make build`.  I used the [`packr`](https://github.com/gobuffalo/packr) lib/cli to include some assets in the binary, so you'll need a working installation of that.  Once this progresses a bit more, I'll likely just include pre-built binaries in the github releases.
+
 ## current state
 
 Currently, Plexus can fire its own webhooks based on webhook input from Plex.  You'll need a `config.json` that looks something like this:
