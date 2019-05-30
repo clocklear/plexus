@@ -48,7 +48,7 @@ Currently, Plexus can fire its own webhooks based on webhook input from Plex.  Y
 }
 ```
 
-Triggers should be a list of things Plexus should respond to.  Each trigger has a `properties` node that will be matched against the activity coming out of Plex.  If all properties match, the trigger is considered a match, and actions are evaluated.  Note that the keys of `properties` can be deep references to complex objects in the payload body.  Use dot notation (e.g., `outer.inner.propA`) to indicate nesting.
+Triggers are a list of things Plexus should respond to.  Each trigger has a `properties` node that will be matched against the activity coming out of Plex.  If all properties match, the trigger is considered a match, and actions are evaluated.  Note that the keys of `properties` can be deep references to complex objects in the payload body.  Use dot notation (e.g., `outer.inner.propA`) to indicate nesting.
 
 Each trigger has a corresponding list of `actions` that will be fired if the trigger is considered a match.  Currently the only supported action is `webhook`, and it is very simple -- you can only control the URL and the HTTP verb used in the request.  Still, this is very powerful.
 
