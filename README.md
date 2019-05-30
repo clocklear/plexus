@@ -48,6 +48,6 @@ Triggers should be a list of things Plexus should respond to.  Each trigger has 
 
 Each trigger has a corresponding list of `actions` that will be fired if the trigger is considered a match.  Currently the only supported action is `webhook`, and it is very simple -- you can only control the URL and the HTTP verb used in the request.  Still, this is very powerful.
 
-As a proof of concept, I have been able to use Plexus to listen to activity coming from my home Plex server and whenever media starts or stops from the living room player, I can dim the lights accordingly.  This is accomplished by invoked IFTTT webhooks that can talk to my Wemo devices remotely.
+As a proof of concept, I have been able to use Plexus to listen to activity coming from my home Plex server and whenever media starts or stops from the living room player, I can dim the lights accordingly.  This is accomplished by invoking IFTTT webhooks that can talk to my Wemo devices remotely.
 
 YMMV.  Very WIP.
