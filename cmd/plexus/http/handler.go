@@ -68,13 +68,31 @@ func handlePlexWebhook(v *schema.Validator, store *plex.Store, cfg plex.Config) 
 		// Per their documentation, Plex will send a multipart form request, and 'payload' is the JSON of the hook
 		// We want to be flexible (makes testing easier), so lets see if we can handle both scenarios (multipart vs raw JSON post)
 		payload := []byte{}
+		thumbPath := ""
 		if hasContentType(r, "multipart/form-data") {
 			err := r.ParseMultipartForm(10 * 1024 * 1024) // 10mb
 			if err != nil {
 				Failure(w, err, http.StatusBadRequest, logger)
 				return
 			}
+
+			// TODO: not super happy with this conditional hell.  Fix it.
 			payload = []byte(r.FormValue("payload"))
+			thumb, fh, err := r.FormFile("thumb")
+			if err == nil {
+				tbs, err := ioutil.ReadAll(thumb)
+				if err != nil {
+					logger.Log("msg", "could not read thumb bytes", "err", err)
+				} else {
+					tp, err := store.AddThumb(reqID, fh.Filename, tbs)
+					if err != nil {
+						logger.Log("msg", "could not save thumb to store", "err", err)
+					} else {
+						thumbPath = tp
+					}
+				}
+
+			}
 		} else {
 			// Assume raw JSON post
 			pl, err := ioutil.ReadAll(r.Body)
@@ -104,6 +122,7 @@ func handlePlexWebhook(v *schema.Validator, store *plex.Store, cfg plex.Config) 
 			RequestID:  reqID,
 			ReceivedAt: time.Now(),
 			Payload:    pl,
+			ThumbPath:  thumbPath,
 		})
 		if err != nil {
 			Failure(w, err, http.StatusInternalServerError, logger)
