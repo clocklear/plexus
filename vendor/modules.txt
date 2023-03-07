@@ -38,6 +38,6 @@ github.com/xeipuuv/gojsonreference
 github.com/xeipuuv/gojsonschema
 # goji.io v2.0.2+incompatible
 goji.io
-goji.io/pat
 goji.io/internal
+goji.io/pat
 goji.io/pattern
